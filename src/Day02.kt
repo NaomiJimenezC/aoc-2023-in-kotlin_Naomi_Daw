@@ -22,7 +22,7 @@ fun main() {
                 jugadasParseadas.add(Pair(numeroBola,colorBola))
             }
 
-            if (jugadasParseadas.all { it.first <= numMaxBolasPorColor[it.second]!! }){
+            if (jugadasParseadas.all { it.first <= (numMaxBolasPorColor[it.second]?.toInt() ?: 0) }){
                 partidasValidas.add(idPartida)
             }
 
