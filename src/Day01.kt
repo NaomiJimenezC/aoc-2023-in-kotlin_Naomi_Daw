@@ -1,26 +1,29 @@
 fun main() {
+    fun getCalibrationValueOfALine(lineOfText:String):Int{
+        val numberInTheLine = lineOfText.filter { it.isDigit() }
+        val firstDigit = numberInTheLine.first()
+        val lastDigit = numberInTheLine.last()
+        val calibrationValue = "$firstDigit$lastDigit".toInt()
+        return calibrationValue
+    }
+
     fun part1(input: List<String>): Int {
-        return input.size
+        val calibrationValues = mutableListOf<Int>()
+        for (puzzle in  input){
+            calibrationValues.add(getCalibrationValueOfALine(puzzle))
+        }
+        return calibrationValues.sum()
     }
 
     fun part2(input: List<String>): Int {
         return input.size
     }
 
-    // test if implementation meets criteria from the description, like:
-    fun getCalibrationValueOfALine(lineOfText:String):String{
-        val numberInTheLine = lineOfText.filter { it.isDigit() }
-        val firstDigit = numberInTheLine.first()
-        val lastDigit = numberInTheLine.last()
-        val calibrationValue = "$firstDigit$lastDigit"
-        return calibrationValue
-    }
 
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+
 
     val input = readInput("Day01")
-    val calibratios_values = mutableListOf<String>()
+    val calibratios_values = part1(input)
 
     println(calibratios_values)
 }

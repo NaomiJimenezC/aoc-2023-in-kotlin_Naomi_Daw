@@ -1,12 +1,9 @@
-import kotlin.reflect.typeOf
-
-fun pairsBalls(partidaDividida: List<String>): MutableList<Pair<Int, String>> {
-    val jugadaPorPartida = partidaDividida[1].replace(";", ",")
-    val jugadasParseadas = mutableListOf<Pair<Int, String>>()
+fun pairsBalls(jugadaPorPartida:String): MutableList<Pair<String, Int>> {
+    val jugadasParseadas = mutableListOf<Pair<String,Int>>()
     for (bolaColor in jugadaPorPartida.split(",")) {
         var numeroBola = bolaColor.filter { it -> it.isDigit() }.toInt()
         var colorBola = bolaColor.filter { it -> it.isLetter() }
-        jugadasParseadas.add(Pair(numeroBola, colorBola))
+        jugadasParseadas.add(Pair(colorBola,numeroBola))
     }
     return jugadasParseadas
 }
@@ -22,10 +19,10 @@ fun part1(partidasJugadas: List<String>):Int{
         val partidaDividida = partida.split(":")
 
         val idPartida = partidaDividida[0].filter { it -> it.isDigit() }.toInt()
+        val jugadas = partidaDividida[1].replace(";",",")
+        val jugadasParseadas = pairsBalls(jugadas)
 
-        val jugadasParseadas = pairsBalls(partidaDividida)
-
-        if (jugadasParseadas.all { it.first <= (numMaxBolasPorColor[it.second]?.toInt() ?: 0) }){
+        if (jugadasParseadas.all { it.second <= (numMaxBolasPorColor[it.first]?.toInt() ?: 0) }){
             partidasValidas.add(idPartida)
         }
 
@@ -38,8 +35,11 @@ fun part2(partidasJugadas:List<String>):Int{
     val resultados = mutableListOf<Int>()
     for (partidaJugada in partidasJugadas){
         val resultadosPartida = partidaJugada.split(":")
-        val bolasResultado = pairsBalls(resultadosPartida)
-        val resultadosDivididosPorColores = bolasResultado.groupBy({ it.second },{it.first})
+        val jugadasPorPartida = resultadosPartida[1].replace(";",",")
+
+        val bolasResultado = pairsBalls(jugadasPorPartida)
+        val resultadosDivididosPorColores = bolasResultado.groupBy({ it.first },{it.second})
+
         val cubosMinimosPorJuego = mutableListOf<Int>()
         resultadosDivididosPorColores.values.forEach { it -> cubosMinimosPorJuego.add(it.max()) }
         val powerForGame =cubosMinimosPorJuego.reduce { factor1, factor2 -> factor1 * factor2 }
@@ -50,6 +50,7 @@ fun part2(partidasJugadas:List<String>):Int{
 
 fun main() {
     val partidasJugadas = readInput("Day02")
+
     val parte1 = part1(partidasJugadas)
     println(parte1)
 
